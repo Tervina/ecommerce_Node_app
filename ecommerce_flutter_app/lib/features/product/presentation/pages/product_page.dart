@@ -18,8 +18,11 @@ class ProductPage extends StatelessWidget {
       //This is the function that tells BlocProvider how to create the BLoC instance.
       create: (_) {
         final bloc = ProductBloc(
+          //This is your actual BLoC that handles events and states related to products.
           GetAllProducts(
+            //A use case class that defines the logic to get all products (usually from a repository). You're injecting it into the bloc because the bloc uses this logic to load data.
             ProductRepositoryImpl(
+              //This is your repository, which is a layer between your use case and data sources. It decides where to get the data from (e.g., network, database).
               remoteDataSource: ProductRemoteDataSourceImpl(
                 client: http.Client(),
               ),
