@@ -10,6 +10,13 @@ build/
 .flutter-plugins
 .packages
 pubspec.lock
+# Ignore platform folders
+test/
+linux/
+ios/
+android/
+web/
+windows/
 
 # IDEs
 .vscode/
