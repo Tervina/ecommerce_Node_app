@@ -20,9 +20,13 @@ class ProductRepositoryImpl implements ProductRepository {
         .map((model) => ProductEntity(
               id: model.id,
               name: model.name,
-              price: model.price,
+              price: model.actual_price, // use actual_price for price field
+              discountedPrice: model.discounted_price,
               description: model.description,
               imageUrl: model.imageUrl,
+              discountPercentage: model.discount_percentage,
+              category: model.category,
+              rating: model.rating,
             ))
         .toList(); //Maps each ProductModel into a ProductEntity.
   }
