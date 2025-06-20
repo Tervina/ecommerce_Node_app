@@ -2,17 +2,24 @@
 class ProductModel {
   final String id;
   final String name;
-  final double price;
+  final String category;
+  final double actual_price;
+  final double discounted_price;
+  final double rating;
   final String description;
   final String imageUrl;
+  final String discount_percentage;
 
-  ProductModel({
-    required this.id,
-    required this.name,
-    required this.price,
-    required this.description,
-    required this.imageUrl,
-  });
+  ProductModel(
+      {required this.id,
+      required this.name,
+      required this.category,
+      required this.actual_price,
+      required this.discounted_price,
+      required this.rating,
+      required this.description,
+      required this.imageUrl,
+      required this.discount_percentage});
 
 //factory constructor is a special way to create an object from something else — in this case, from a JSON map.
 //Map<String, dynamic> is a map/dictionary with key-value pairs like "id": "1".
@@ -20,11 +27,21 @@ class ProductModel {
     return ProductModel(
       id: json['product_id'],
       name: json['product_name'],
-      price: double.tryParse(
-              json['discounted_price'].replaceAll(RegExp(r'[^\d.]'), '')) ??
+      actual_price: double.tryParse(json['actual_price']
+                  ?.toString()
+                  .replaceAll(RegExp(r'[^\d.]'), '') ??
+              '0') ??
           0.0,
       description: json['about_product'] ?? '',
       imageUrl: json['img_link'] ?? '',
+      discount_percentage: json['discount_percentage'] ?? 0,
+      discounted_price: double.tryParse(json['discounted_price']
+                  ?.toString()
+                  .replaceAll(RegExp(r'[^\d.]'), '') ??
+              '0') ??
+          0.0,
+      category: json['category'] ?? '',
+      rating: double.tryParse(json['rating']?.toString() ?? '0') ?? 0.0,
     );
   }
 
@@ -32,8 +49,12 @@ class ProductModel {
   Map<String, dynamic> toJson() => {
         'product_id': id,
         'product_name': name,
-        'discounted_price': price.toString(),
+        'discounted_actual_price': actual_price.toString(),
         'about_product': description,
         'img_link': imageUrl,
+        'discount_percentage': discount_percentage,
+        'discounted_price': discounted_price?.toString(),
+        'category': category,
+        'rating': rating?.toString(),
       };
 }
