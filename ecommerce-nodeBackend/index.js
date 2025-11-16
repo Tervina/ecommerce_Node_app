@@ -4,6 +4,10 @@ const connectDB = require('./config/db'); //Imports your database connection fun
 const productRoutes = require('./routes/productRoutes'); //Imports your product-related API routes.
 const userRoutes = require('./routes/userRoutes');
 const cartRoutes = require('./routes/cartRoutes');
+const orderRoutes = require("./routes/orderRoutes");
+const authRoutes = require('./routes/authRoutes');
+
+
 require('dotenv').config(); //Initializes dotenv so it can load .env file contents into process.env.
 
 
@@ -30,6 +34,11 @@ app.use('/api/products', productRoutes); //When a request comes in to /api/produ
 app.use('/api/users', userRoutes);
 
 app.use('/api/cart', cartRoutes);
+
+app.use("/api/orders", orderRoutes);
+
+app.use("/api/auth", authRoutes);
+
 
 
 

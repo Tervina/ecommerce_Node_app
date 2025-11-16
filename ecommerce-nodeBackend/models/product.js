@@ -19,6 +19,11 @@ const productSchema = new mongoose.Schema({
   review_content: String,
   img_link: String,
   product_link: String,
+  stock: {
+    type: Number,
+    required: true,
+    // default: 0, // start with 0 or any initial quantity
+  },
 }, { collection: 'ecommerceDB' }); // 👈 THIS IS IMPORTANT
 
-module.exports = mongoose.model('Product', productSchema);
+module.exports = mongoose.model('ecommerceDB', productSchema);

@@ -31,9 +31,30 @@ class ProductRepositoryImpl implements ProductRepository {
         .toList(); //Maps each ProductModel into a ProductEntity.
   }
 
+  // @override
+  // Future<ProductEntity> getProductById(String id) async {
+  //   final product = await remoteDataSource.getProductById(id);
+  //   return product as ProductEntity; // Explicit cast
+  // }
   @override
   Future<ProductEntity> getProductById(String id) async {
-    final product = await remoteDataSource.getProductById(id);
-    return product as ProductEntity; // Explicit cast
+    final ProductModel model = await remoteDataSource.getProductById(id);
+    return ProductEntity(
+      id: model.id,
+      name: model.name,
+      price: model.price,
+      discountedPrice: model.discountedPrice,
+      description: model.description,
+      imageUrl: model.imageUrl,
+      discountPercentage: model.discountPercentage,
+      category: model.category,
+      rating: model.rating,
+    );
   }
+
+  // Future<List<ProductModel>> getProductsByCategory(String categoryName) async {
+  //   final response = await remoteDataSource.getProductsByCategory(categoryName);
+  //   final List data = response.data;
+  //   return data.map((json) => ProductModel.fromJson(json)).toList();
+  // }
 }

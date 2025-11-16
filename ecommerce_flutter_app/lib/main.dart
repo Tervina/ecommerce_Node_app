@@ -1,16 +1,66 @@
+import 'package:dio/dio.dart';
+import 'package:ecommerce_flutter_app/features/product/data/datasources/category_remote_data_source.dart';
+import 'package:ecommerce_flutter_app/features/product/data/datasources/order_remote_data_source.dart';
+import 'package:ecommerce_flutter_app/features/product/data/repositories/category_repository_impl.dart';
+import 'package:ecommerce_flutter_app/features/product/data/repositories/order_repository_impl.dart';
+import 'package:ecommerce_flutter_app/features/product/data/services/api_service.dart';
+import 'package:ecommerce_flutter_app/features/product/domain/repositories/order_repository.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/cart_bloc.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/category/category_bloc.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/order/order_bloc.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/pages/cart_page.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/pages/contact_page.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/pages/login_page.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/pages/reset_password_page.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/pages/signUp_page.dart';
 import 'package:ecommerce_flutter_app/presentation/pages/about_page.dart';
+import 'package:ecommerce_flutter_app/presentation/pages/checkout_page.dart';
 import 'package:flutter/material.dart';
-import 'features/product/presentation/pages/product_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'features/product/presentation/pages/home_page.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Supabase.initialize(
+    url: 'https://ufwatjrtbxpwawbonpjt.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmd2F0anJ0Ynhwd2F3Ym9ucGp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3NjM4ODgsImV4cCI6MjA3MDMzOTg4OH0.zjXUv9mREaBQ658McxPJaHHO0w7EzpbfoJsZml-YZRM',
+    authOptions: const FlutterAuthClientOptions(
+      authFlowType: AuthFlowType.pkce, // This is important!
+    ),
+  );
 
-  // await Supabase.initialize(
-  //   url: 'https://ufwatjrtbxpwawbonpjt.supabase.co',
-  //   anonKey:
-  //       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmd2F0anJ0Ynhwd2F3Ym9ucGp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQ3NjM4ODgsImV4cCI6MjA3MDMzOTg4OH0.zjXUv9mREaBQ658McxPJaHHO0w7EzpbfoJsZml-YZRM',
-  // );
-  runApp(const MyApp());
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => CartBloc(),
+        ),
+        BlocProvider<OrderBloc>(
+          create: (context) => OrderBloc(
+            OrderRepositoryImpl(
+              remoteDataSource: OrderRemoteDataSourceImpl(
+                apiService: ApiService(),
+              ),
+            ),
+          ),
+        ),
+        // Add more Blocs here if needed
+        BlocProvider(
+          create: (context) => CategoryBloc(
+            CategoryRepositoryImpl(
+              remoteDataSource: CategoryRemoteDataSource(
+                Dio(),
+                apiService: ApiService(),
+              ),
+            ),
+          ),
+        ),
+      ],
+      child: const MyApp(), // <-- wrap MyApp here
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -24,9 +74,19 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ProductPage(), // <- Show your products here!
+      home: HomePage(), // <- Show your products here!
       routes: {
+        '/home': (context) => const HomePage(),
         '/about': (context) => const AboutPage(),
+        '/cart': (context) => const CartPage(),
+        '/checkout': (context) => const CheckoutPage(),
+        '/contact': (context) => const ContactPage(),
+        '/signUp': (context) => const SignUpPage(),
+        '/login': (context) => const LoginPage(),
+        '/reset-password': (context) {
+          final email = ModalRoute.of(context)!.settings.arguments as String?;
+          return ResetPasswordPage(email: email);
+        },
       },
     );
   }

@@ -1,3 +1,5 @@
+import 'package:ecommerce_flutter_app/features/product/presentation/widgets/custom_appBar.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/widgets/custom_footer.dart';
 import 'package:flutter/material.dart';
 
 class AboutPage extends StatelessWidget {
@@ -6,100 +8,114 @@ class AboutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('About Us'),
-      ),
+      appBar: const CustomAppBar(), // ✅ Stays fixed at top
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Our Story Section
-              Row(
+        // ✅ Everything scrolls including footer
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // ====== Page Content ======
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Our Story',
-                          style: TextStyle(
-                              fontSize: 32, fontWeight: FontWeight.bold),
+                  // Our Story Section
+                  Row(
+                    children: [
+                      const Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Our Story',
+                              style: TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 16),
+                            Text(
+                              "Launched in 2015, Exclusive is South Asia's premier online shopping marketplace with an active presence in Bangladesh. Supported by a wide range of tailored marketing, data and service solutions, Exclusive has 10,500 sellers and 300 brands and serves 3 million customers across the region.\n\nExclusive has more than 1 Million products to offer, growing at a very fast. Exclusive offers a diverse assortment in categories ranging from consumer.",
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          "Launched in 2015, Exclusive is South Asia's premier online shopping marketplace with an active presence in Bangladesh. Supported by a wide range of tailored marketing, data and service solutions, Exclusive has 10,500 sellers and 300 brands and serves 3 million customers across the region.\n\nExclusive has more than 1 Million products to offer, growing at a very fast. Exclusive offers a diverse assortment in categories ranging from consumer.",
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Image.asset(
+                          'assets/images/about.jpg',
+                          height: 500,
+                          fit: BoxFit.cover,
                         ),
-                      ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 48),
+
+                  // Statistics Section
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildStatisticCard(
+                          Icons.store, '10.5k', 'Sellers active on our site'),
+                      _buildStatisticCard(
+                          Icons.monetization_on, '33k', 'Monthly Product Sale',
+                          isHighlighted: true),
+                      _buildStatisticCard(
+                          Icons.people, '45.5k', 'Customer active in our site'),
+                      _buildStatisticCard(Icons.account_balance_wallet, '25k',
+                          'Annual gross sale in our site'),
+                    ],
+                  ),
+                  const SizedBox(height: 48),
+
+                  // Team Section
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildTeamMemberCard('assets/images/tom_cruise.jpg',
+                          'Tom Cruise', 'Founder & Chairman'),
+                      _buildTeamMemberCard('assets/images/emma_watson.jpg',
+                          'Emma Watson', 'Managing Director'),
+                      _buildTeamMemberCard('assets/images/will_smith.jpg',
+                          'Will Smith', 'Product Designer'),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  const Center(
+                    child: Text(
+                      '.....',
+                      style: TextStyle(fontSize: 24, letterSpacing: 8),
                     ),
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: Image.network(
-                      'https://placehold.co/600x400/pink/white',
-                      height: 300,
-                      fit: BoxFit.cover,
-                    ),
+                  const SizedBox(height: 48),
+
+                  // Services Section
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _buildServiceCard(
+                          Icons.local_shipping,
+                          'FREE AND FAST DELIVERY',
+                          'Free delivery for all orders over \$140'),
+                      _buildServiceCard(
+                          Icons.headset_mic,
+                          '24/7 CUSTOMER SERVICE',
+                          'Friendly 24/7 customer support'),
+                      _buildServiceCard(
+                          Icons.verified_user,
+                          'MONEY BACK GUARANTEE',
+                          'We return money within 30 days'),
+                    ],
                   ),
                 ],
               ),
-              const SizedBox(height: 48),
+            ),
 
-              // Statistics Section
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildStatisticCard(
-                      Icons.store, '10.5k', 'Sellers active on our site'),
-                  _buildStatisticCard(
-                      Icons.monetization_on, '33k', 'Monthly Product Sale',
-                      isHighlighted: true),
-                  _buildStatisticCard(
-                      Icons.people, '45.5k', 'Customer active in our site'),
-                  _buildStatisticCard(Icons.account_balance_wallet, '25k',
-                      'Annual gross sale in our site'),
-                ],
-              ),
-              const SizedBox(height: 48),
-
-              // Team Section
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildTeamMemberCard('https://placehold.co/300x300',
-                      'Tom Cruise', 'Founder & Chairman'),
-                  _buildTeamMemberCard('https://placehold.co/300x300',
-                      'Emma Watson', 'Managing Director'),
-                  _buildTeamMemberCard('https://placehold.co/300x300',
-                      'Will Smith', 'Product Designer'),
-                ],
-              ),
-              const SizedBox(height: 24),
-              const Center(
-                child: Text(
-                  '.....',
-                  style: TextStyle(fontSize: 24, letterSpacing: 8),
-                ),
-              ),
-              const SizedBox(height: 48),
-
-              // Services Section
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildServiceCard(
-                      Icons.local_shipping,
-                      'FREE AND FAST DELIVERY',
-                      'Free delivery for all orders over \$140'),
-                  _buildServiceCard(Icons.headset_mic, '24/7 CUSTOMER SERVICE',
-                      'Friendly 24/7 customer support'),
-                  _buildServiceCard(Icons.verified_user, 'MONEY BACK GUARANTEE',
-                      'We return money within 30 days'),
-                ],
-              ),
-            ],
-          ),
+            // ====== Footer ======
+            const CustomFooter(), // ✅ No padding — full width
+          ],
         ),
       ),
     );

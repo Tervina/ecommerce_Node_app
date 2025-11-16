@@ -1,6 +1,13 @@
+import 'package:dio/dio.dart';
+import 'package:ecommerce_flutter_app/features/product/data/datasources/category_remote_data_source.dart';
+import 'package:ecommerce_flutter_app/features/product/data/repositories/category_repository_impl.dart';
+import 'package:ecommerce_flutter_app/features/product/data/services/api_service.dart';
 import 'package:ecommerce_flutter_app/features/product/domain/entities/product_entity.dart';
 import 'package:ecommerce_flutter_app/features/product/domain/repositories/product_repository.dart';
 import 'package:ecommerce_flutter_app/features/product/domain/usecases/get_product_by_id.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/category/category_bloc.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/category/category_event.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/pages/category_page.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/widgets/Product_card.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/widgets/category_section.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/widgets/custom_footer.dart';
@@ -17,14 +24,14 @@ import '../../data/repositories/product_repository_impl.dart';
 import '../../data/datasources/product_remote_data_source.dart';
 import 'package:http/http.dart' as http;
 
-class ProductPage extends StatefulWidget {
-  const ProductPage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<ProductPage> createState() => _ProductPageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _ProductPageState extends State<ProductPage> {
+class _HomePageState extends State<HomePage> {
   bool isHovered = false;
   @override
   Widget build(BuildContext context) {
@@ -93,21 +100,79 @@ class _ProductPageState extends State<ProductPage> {
                             SizedBox(
                               child: Column(children: [
                                 Column(children: [
+                                  // HoverMenu(
+                                  //   menuItems: const [
+                                  //     'Computers',
+                                  //     'Televisions',
+                                  //     'Cables&Accessories',
+                                  //     'Smart watch',
+                                  //     'Home Supplies'
+                                  //   ],
+                                  //   onTap: () {
+                                  //     Navigator.push(
+                                  //       context,
+                                  //       MaterialPageRoute(
+                                  //         builder: (context) => BlocProvider(
+                                  //           create: (context) => CategoryBloc(
+                                  //             CategoryRepositoryImpl(
+                                  //               remoteDataSource:
+                                  //                   CategoryRemoteDataSource(
+                                  //                 Dio(),
+                                  //                 apiService: ApiService(),
+                                  //               ),
+                                  //             ),
+                                  //           )..add(LoadCategoryProducts(
+                                  //               categoryName)),
+                                  //           child: CategoryPage(
+                                  //               categoryName: categoryName),
+                                  //         ),
+                                  //       ),
+                                  //     );
+                                  //   },
+                                  //   width: 300,
+                                  //   backgroundColor: const Color.fromARGB(
+                                  //       255, 193, 193, 193),
+                                  //   hoverColor: Colors.green.withOpacity(0.2),
+                                  //   hoverTextColor: Colors.green,
+                                  //   fontSize: 16,
+                                  // )
                                   HoverMenu(
                                     menuItems: const [
-                                      'Computers',
+                                      'laptop',
                                       'Televisions',
                                       'Cables&Accessories',
                                       'Smart watch',
-                                      'Home Supplies'
+                                      'Kitchen'
                                     ],
+                                    onItemTap: (categoryName) {
+                                      // ✅ FIX: use onItemTap, not onTap
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => BlocProvider(
+                                            create: (context) => CategoryBloc(
+                                              CategoryRepositoryImpl(
+                                                remoteDataSource:
+                                                    CategoryRemoteDataSource(
+                                                  Dio(),
+                                                  apiService: ApiService(),
+                                                ),
+                                              ),
+                                            )..add(LoadCategoryProducts(
+                                                categoryName)),
+                                            child: CategoryPage(
+                                                categoryName: categoryName),
+                                          ),
+                                        ),
+                                      );
+                                    },
                                     width: 300,
                                     backgroundColor: const Color.fromARGB(
                                         255, 193, 193, 193),
                                     hoverColor: Colors.green.withOpacity(0.2),
                                     hoverTextColor: Colors.green,
                                     fontSize: 16,
-                                  )
+                                  ),
                                 ]),
                               ]),
                             ),

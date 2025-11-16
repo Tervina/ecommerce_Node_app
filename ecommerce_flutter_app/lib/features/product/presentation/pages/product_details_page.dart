@@ -1,5 +1,8 @@
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/cart_bloc.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/cart_event.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/bloc/product_details_event.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/bloc/product_details_state.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/pages/cart_page.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/widgets/Product_card.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/widgets/custom_appBar.dart';
 import 'package:flutter/material.dart';
@@ -129,6 +132,16 @@ class _ProductDetailsState extends State<ProductDetails> {
                                               onPressed: () {
                                                 print(
                                                     "Buy ${state.quantity} items of ${product.name}");
+                                                
+                                                context.read<CartBloc>().add(
+                                                      AddToCart(
+                                                          product: product,
+                                                          quantity: state
+                                                              .quantity), // make sure you have this event
+                                                    );
+
+                                                Navigator.pushNamed(context,
+                                                    '/cart'); // navigate to cart page
                                               },
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor: Colors.red,

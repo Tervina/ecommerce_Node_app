@@ -7,6 +7,7 @@ import 'package:ecommerce_flutter_app/features/product/domain/usecases/get_produ
 import 'package:ecommerce_flutter_app/features/product/presentation/bloc/product_details_bloc.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/bloc/product_details_event.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/pages/product_details_page.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/widgets/custom_appBar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
@@ -30,82 +31,84 @@ class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.2),
-            blurRadius: 5,
-            spreadRadius: 2,
-          )
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Product Image
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.network(widget.product.imageUrl ?? "",
-                height: 160,
-                width: double.infinity,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) =>
-                    Image.asset('assets/images/out_of_stock.png')),
-          ),
-          const SizedBox(height: 10),
-          // Product Name
-          Text(
-            widget.product.name ?? "Unnamed Product",
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-          ),
-          // const SizedBox(height: 3),
-          // Product Price
-          Text(
-            "\$${widget.product.price?.toStringAsFixed(2) ?? "0.00"}",
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.green,
-            ),
-          ),
-          const SizedBox(height: 5),
-
-          Container(
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(8), // Rounded corners here
+        width: 200,
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              blurRadius: 5,
+              spreadRadius: 2,
+            )
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Product Image
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Center(
+                child: Image.network(widget.product.imageUrl ?? "",
+                    height: 160,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) =>
+                        Image.asset('assets/images/out_of_stock.png')),
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-              child: Text(
-                "${widget.product.discountPercentage}%",
-                style: const TextStyle(color: Colors.white),
-              )),
-          const Spacer(),
-          AddToCartButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => BlocProvider(
-                    create: (_) => ProductDetailsBloc(
-                      getProductById: GetProductById(repository),
-                      getAllProducts: GetAllProducts(repository),
-                    )..add(LoadProductDetails(widget.product.id ?? "")),
-                    child: ProductDetails(productId: widget.product.id ?? ""),
-                  ),
+            ),
+            const SizedBox(height: 10),
+            // Product Name
+            Text(
+              widget.product.name ?? "Unnamed Product",
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+            // const SizedBox(height: 3),
+            // Product Price
+            Text(
+              "\$${widget.product.price?.toStringAsFixed(2) ?? "0.00"}",
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.green,
+              ),
+            ),
+            const SizedBox(height: 5),
+
+            Container(
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius:
+                      BorderRadius.circular(8), // Rounded corners here
                 ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                child: Text(
+                  "${widget.product.discountPercentage}%",
+                  style: const TextStyle(color: Colors.white),
+                )),
+            const Spacer(),
+            AddToCartButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => BlocProvider(
+                      create: (_) => ProductDetailsBloc(
+                        getProductById: GetProductById(repository),
+                        getAllProducts: GetAllProducts(repository),
+                      )..add(LoadProductDetails(widget.product.id ?? "")),
+                      child: ProductDetails(productId: widget.product.id ?? ""),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ));
   }
 }
 
