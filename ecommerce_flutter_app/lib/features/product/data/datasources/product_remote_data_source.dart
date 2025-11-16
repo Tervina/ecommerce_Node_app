@@ -7,6 +7,7 @@ import '../models/product_model.dart'; // This imports the ProductModel so we ca
 abstract class ProductRemoteDataSource {
   Future<List<ProductModel>>
       getAllProducts(); // Future<List<ProductModel>> getAllProducts() means: "We promise to return a future list of product models".
+  Future<ProductModel> getProductById(String id);
 }
 
 //This is where we’ll actually write the working code to fetch products.
@@ -44,6 +45,16 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     } else {
       throw Exception(
           'Failed to load products'); //If the server didn’t respond with 200, we throw an error.
+    }
+  }
+
+  Future<ProductModel> getProductById(String id) async {
+    final response =
+        await http.get(Uri.parse('http://localhost:5000/api/products/$id'));
+    if (response.statusCode == 200) {
+      return ProductModel.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to fetch product details');
     }
   }
 }

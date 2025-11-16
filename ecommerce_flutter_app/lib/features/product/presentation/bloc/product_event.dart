@@ -13,3 +13,12 @@ abstract class ProductEvent extends Equatable {
 
 class LoadProducts
     extends ProductEvent {} //- It says: “Hey Bloc! Load the product list now.”
+
+// class FetchProductById extends ProductEvent {
+//   final String id;
+//   FetchProductById(this.id);
+// }
+
+// class IncreaseQuantity extends ProductEvent {}
+
+// class DecreaseQuantity extends ProductEvent {}

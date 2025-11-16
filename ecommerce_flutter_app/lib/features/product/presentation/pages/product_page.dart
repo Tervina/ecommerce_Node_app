@@ -1,7 +1,12 @@
-import 'package:ecommerce_flutter_app/features/product/presentation/pages/Product_card.dart';
-import 'package:ecommerce_flutter_app/features/product/presentation/pages/category_section.dart';
-import 'package:ecommerce_flutter_app/features/product/presentation/pages/hover_menu.dart';
-import 'package:ecommerce_flutter_app/features/product/presentation/pages/voucher_slider.dart';
+import 'package:ecommerce_flutter_app/features/product/domain/entities/product_entity.dart';
+import 'package:ecommerce_flutter_app/features/product/domain/repositories/product_repository.dart';
+import 'package:ecommerce_flutter_app/features/product/domain/usecases/get_product_by_id.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/widgets/Product_card.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/widgets/category_section.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/widgets/custom_footer.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/widgets/hover_menu.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/widgets/voucher_slider.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/widgets/custom_appBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/product_bloc.dart';
@@ -11,7 +16,6 @@ import '../../domain/usecases/get_all_products.dart';
 import '../../data/repositories/product_repository_impl.dart';
 import '../../data/datasources/product_remote_data_source.dart';
 import 'package:http/http.dart' as http;
-import 'custom_footer.dart';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({super.key});
@@ -37,138 +41,34 @@ class _ProductPageState extends State<ProductPage> {
     //BlocProvider makes the BLoC available to all child widgets below it.
     return BlocProvider(
       //This is the function that tells BlocProvider how to create the BLoC instance.
+      // create: (_) {
+      //   final repository = ProductRepositoryImpl(
+      //     remoteDataSource: ProductRemoteDataSourceImpl(client: http.Client()),
+      //   );
+
+      //   final bloc = ProductBloc(
+      //     GetAllProducts(repository),
+      //     GetProductById(repository),
+      //     getAllProducts: null,
+      //   );
+
+      //   bloc.add(LoadProducts()); // Load products when page opens
+      //   return bloc;
+      // },
       create: (_) {
-        final bloc = ProductBloc(
-          //This is your actual BLoC that handles events and states related to products.
-          GetAllProducts(
-            //A use case class that defines the logic to get all products (usually from a repository). You're injecting it into the bloc because the bloc uses this logic to load data.
-            ProductRepositoryImpl(
-              //This is your repository, which is a layer between your use case and data sources. It decides where to get the data from (e.g., network, database).
-              remoteDataSource: ProductRemoteDataSourceImpl(
-                client: http.Client(),
-              ),
-            ),
-          ),
+        final repository = ProductRepositoryImpl(
+          remoteDataSource: ProductRemoteDataSourceImpl(client: http.Client()),
         );
-        bloc.add(
-            LoadProducts()); //Tells the BLoC: “Hey, go load products from the backend!”
-        return bloc;
+
+        return ProductBloc(getAllProducts: GetAllProducts(repository))
+          ..add(LoadProducts());
       },
       child: DefaultTabController(
         initialIndex: 1,
         length: tabsCount,
         child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.grey,
-            flexibleSpace: Column(
-              children: [
-                Container(
-                  width: double.infinity,
-                  color: Colors.black, // Different color than AppBar
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: Row(
-                    children: [
-                      const Spacer(),
-                      const Text(
-                        "🔥 Flash Sale 🔥",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const Spacer(),
-                      TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            "English",
-                            style: TextStyle(color: Colors.white),
-                          )),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.arrow_drop_down_sharp,
-                            color: Colors.white,
-                          ))
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(
-                  100), // Height of the widget under AppBar
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      const Text(
-                        "Exclusive",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                      ),
-                      const SizedBox(width: 200),
-                      TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            "Home",
-                            style: TextStyle(color: Colors.black),
-                          )),
-                      const SizedBox(width: 20),
-                      TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            "Contact",
-                            style: TextStyle(color: Colors.black),
-                          )),
-                      const SizedBox(width: 20),
-                      TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            "About",
-                            style: TextStyle(color: Colors.black),
-                          )),
-                      const SizedBox(width: 20),
-                      TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            "Sign Up",
-                            style: TextStyle(color: Colors.black),
-                          )),
-                      const SizedBox(width: 20),
-                      SearchBar(
-                        padding: const WidgetStatePropertyAll<EdgeInsets>(
-                          EdgeInsets.symmetric(horizontal: 10),
-                        ),
-                        constraints: const BoxConstraints(
-                            minWidth: 200, maxWidth: 400, minHeight: 30),
-                        onTap: () {},
-                        hintText: "What are you looking for?",
-                        trailing: const <Widget>[Icon(Icons.search)],
-                      ),
-                      const SizedBox(width: 20),
-
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.shopping_cart_sharp,
-                            color: Colors.black87,
-                          )),
-                      const SizedBox(width: 20),
-                      IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.person_4_rounded,
-                            color: Colors.black87,
-                          ))
-                      // Add more widgets...
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
+          appBar: const PreferredSize(
+              preferredSize: Size.fromHeight(150), child: CustomAppBar()),
 
           //BlocBuilder listens for state changes and rebuilds the UI.
           body: BlocBuilder<ProductBloc, ProductState>(
@@ -270,9 +170,9 @@ class _ProductPageState extends State<ProductPage> {
                         child: Text(
                           'Our Products',
                           style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red),
                         ),
                       ),
                     ),
@@ -284,7 +184,7 @@ class _ProductPageState extends State<ProductPage> {
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 5,
-                          childAspectRatio: 0.75,
+                          childAspectRatio: 0.75, // Controls card height/width
                           crossAxisSpacing: 12,
                           mainAxisSpacing: 12,
                         ),
@@ -299,14 +199,12 @@ class _ProductPageState extends State<ProductPage> {
                         ),
                       ),
                     ),
-                    SliverToBoxAdapter(
+                    const SliverToBoxAdapter(
                       child: CustomFooter(),
                     ),
                   ],
                 );
-              }
-              //Displays the error message returned from the BLoC.
-              else if (state is ProductError) {
+              } else if (state is ProductError) {
                 return Center(child: Text(state.message));
               }
 

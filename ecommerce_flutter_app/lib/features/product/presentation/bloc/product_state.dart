@@ -20,6 +20,14 @@ class ProductLoaded extends ProductState {
   List<Object?> get props => [products];
 }
 
+// When a single product is successfully loaded
+// class ProductDetailsLoaded extends ProductState {
+//   final ProductEntity product;
+//   final int quantity;
+
+//   ProductDetailsLoaded({required this.product, required this.quantity});
+// }
+
 //shows any error messages.
 class ProductError extends ProductState {
   final String message;

@@ -20,14 +20,20 @@ class ProductRepositoryImpl implements ProductRepository {
         .map((model) => ProductEntity(
               id: model.id,
               name: model.name,
-              price: model.actual_price, // use actual_price for price field
-              discountedPrice: model.discounted_price,
+              price: model.price, // use actual_price for price field
+              discountedPrice: model.discountedPrice,
               description: model.description,
               imageUrl: model.imageUrl,
-              discountPercentage: model.discount_percentage,
+              discountPercentage: model.discountPercentage,
               category: model.category,
               rating: model.rating,
             ))
         .toList(); //Maps each ProductModel into a ProductEntity.
+  }
+
+  @override
+  Future<ProductEntity> getProductById(String id) async {
+    final product = await remoteDataSource.getProductById(id);
+    return product as ProductEntity; // Explicit cast
   }
 }

@@ -5,6 +5,7 @@ The ProductEntity is a clean, backend-independent representation of a product (w
 import '../entities/product_entity.dart';
 
 abstract class ProductRepository {
-  Future<List<ProductEntity>>
-      getAllProducts(); // It returns a Future<List<ProductEntity>> = async list of products./
+  Future<List<ProductEntity>> getAllProducts();
+  // It returns a Future<List<ProductEntity>> = async list of products./
+  Future<ProductEntity> getProductById(String id);
 }
