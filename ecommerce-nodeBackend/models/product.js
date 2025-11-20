@@ -22,7 +22,7 @@ const productSchema = new mongoose.Schema({
   stock: {
     type: Number,
     required: true,
-    // default: 0, // start with 0 or any initial quantity
+    default: 0, // start with 0 or any initial quantity
   },
 }, { collection: 'ecommerceDB' }); // 👈 THIS IS IMPORTANT
 

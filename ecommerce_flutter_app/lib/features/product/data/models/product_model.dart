@@ -129,6 +129,7 @@ class ProductModel extends ProductEntity {
     String? discountPercentage,
     String? category,
     double? rating,
+    int? stock,
   }) : super(
           id: id,
           name: name,
@@ -139,6 +140,7 @@ class ProductModel extends ProductEntity {
           discountPercentage: discountPercentage,
           category: category,
           rating: rating,
+          stock: stock,
         );
 
   /// Helper method to clean symbols and parse safely
@@ -165,6 +167,10 @@ class ProductModel extends ProductEntity {
       discountPercentage: _parseDiscount(json['discount_percentage']),
       category: json['category'] ?? '',
       rating: _parsePrice(json['rating']),
+      // ⭐ FIX: Handle stock safely
+      stock: json['stock'] is int
+          ? json['stock']
+          : int.tryParse(json['stock']?.toString() ?? '0') ?? 0,
     );
   }
 
@@ -179,6 +185,7 @@ class ProductModel extends ProductEntity {
       'discount_percentage': discountPercentage,
       'category': category,
       'rating': rating,
+      'stock': stock,
     };
   }
 }

@@ -11,16 +11,17 @@ class ProductEntity {
   final String? discountPercentage;
   final String? category;
   final double? rating;
+  final int? stock;
 
-  const ProductEntity({
-    required this.id,
-    required this.name,
-    required this.price,
-    this.discountedPrice,
-    required this.description,
-    required this.imageUrl,
-    this.discountPercentage,
-    this.category,
-    this.rating,
-  });
+  const ProductEntity(
+      {required this.id,
+      required this.name,
+      required this.price,
+      this.discountedPrice,
+      required this.description,
+      required this.imageUrl,
+      this.discountPercentage,
+      this.category,
+      this.rating,
+      this.stock});
 }

@@ -27,6 +27,7 @@ class ProductRepositoryImpl implements ProductRepository {
               discountPercentage: model.discountPercentage,
               category: model.category,
               rating: model.rating,
+              stock: model.stock,
             ))
         .toList(); //Maps each ProductModel into a ProductEntity.
   }
@@ -49,6 +50,7 @@ class ProductRepositoryImpl implements ProductRepository {
       discountPercentage: model.discountPercentage,
       category: model.category,
       rating: model.rating,
+      stock: model.stock,
     );
   }
 
