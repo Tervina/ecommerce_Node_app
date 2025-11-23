@@ -2,125 +2,146 @@
 // import 'package:ecommerce_flutter_app/features/product/presentation/widgets/custom_footer.dart';
 // import 'package:flutter/material.dart';
 
-// class ContactPage extends StatelessWidget {
+// class ContactPage extends StatefulWidget {
 //   const ContactPage({super.key});
+
+//   @override
+//   State<ContactPage> createState() => _ContactPageState();
+// }
+
+// class _ContactPageState extends State<ContactPage> {
+//   final TextEditingController nameController = TextEditingController();
+//   final TextEditingController emailController = TextEditingController();
+//   final TextEditingController phoneController = TextEditingController();
+//   final TextEditingController messageController = TextEditingController();
 
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
 //       backgroundColor: Colors.white,
 //       appBar: CustomAppBar(),
-//       body: Column(
-//         children: [
-//           SingleChildScrollView(
-//             padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 40),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 // 🧭 Breadcrumb
-//                 const Text(
-//                   'Home / Contact',
-//                   style: TextStyle(fontSize: 16, color: Colors.grey),
-//                 ),
-//                 const SizedBox(height: 40),
+//       body: SingleChildScrollView(
+//         child: Column(
+//           children: [
+//             Padding(
+//               padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 40),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   // 🧭 Breadcrumb
+//                   const Text(
+//                     'Home / Contact',
+//                     style: TextStyle(fontSize: 16, color: Colors.grey),
+//                   ),
+//                   const SizedBox(height: 40),
 
-//                 // 🧱 Main Content Row
-//                 Row(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     // Left Info Box
-//                     Expanded(
-//                       flex: 1,
-//                       child: Container(
-//                         padding: const EdgeInsets.all(24),
-//                         decoration: BoxDecoration(
-//                           border: Border.all(color: Colors.grey.shade300),
-//                           borderRadius: BorderRadius.circular(8),
-//                         ),
-//                         child: Column(
-//                           crossAxisAlignment: CrossAxisAlignment.start,
-//                           children: [
-//                             _contactItem(
-//                               icon: Icons.phone_in_talk_rounded,
-//                               title: 'Call To Us',
-//                               subtitle:
-//                                   'We are available 24/7, 7 days a week.\nPhone: +8801611122222',
-//                             ),
-//                             Divider(color: Colors.grey.shade300, height: 40),
-//                             _contactItem(
-//                               icon: Icons.email_rounded,
-//                               title: 'Write To Us',
-//                               subtitle:
-//                                   'Fill out our form and we will contact you within 24 hours.\n\nEmails:\ncustomer@exclusive.com\nsupport@exclusive.com',
-//                             ),
-//                           ],
+//                   // 🧱 Main Content Row
+//                   Row(
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     children: [
+//                       // Left Info Box
+//                       Expanded(
+//                         flex: 1,
+//                         child: Container(
+//                           padding: const EdgeInsets.all(24),
+//                           decoration: BoxDecoration(
+//                             border: Border.all(color: Colors.grey.shade300),
+//                             borderRadius: BorderRadius.circular(8),
+//                           ),
+//                           child: Column(
+//                             crossAxisAlignment: CrossAxisAlignment.start,
+//                             children: [
+//                               _contactItem(
+//                                 icon: Icons.phone_in_talk_rounded,
+//                                 title: 'Call To Us',
+//                                 subtitle:
+//                                     'We are available 24/7, 7 days a week.\nPhone: +8801611122222',
+//                               ),
+//                               Divider(color: Colors.grey.shade300, height: 40),
+//                               _contactItem(
+//                                 icon: Icons.email_rounded,
+//                                 title: 'Write To Us',
+//                                 subtitle:
+//                                     'Fill out our form and we will contact you within 24 hours.\n\nEmails:\ncustomer@exclusive.com\nsupport@exclusive.com',
+//                               ),
+//                             ],
+//                           ),
 //                         ),
 //                       ),
-//                     ),
 
-//                     const SizedBox(width: 40),
+//                       const SizedBox(width: 40),
 
-//                     // Right Form Box
-//                     Expanded(
-//                       flex: 2,
-//                       child: Container(
-//                         padding: const EdgeInsets.all(24),
-//                         decoration: BoxDecoration(
-//                           border: Border.all(color: Colors.grey.shade300),
-//                           borderRadius: BorderRadius.circular(8),
-//                         ),
-//                         child: Column(
-//                           crossAxisAlignment: CrossAxisAlignment.start,
-//                           children: [
-//                             // Top 3 input fields
-//                             Row(
-//                               children: [
-//                                 Expanded(child: _textField('Your Name *')),
-//                                 const SizedBox(width: 16),
-//                                 Expanded(child: _textField('Your Email *')),
-//                                 const SizedBox(width: 16),
-//                                 Expanded(child: _textField('Your Phone *')),
-//                               ],
-//                             ),
-//                             const SizedBox(height: 20),
-//                             _textField('Your Message', maxLines: 6),
-//                             const SizedBox(height: 24),
-//                             Align(
-//                               alignment: Alignment.centerRight,
-//                               child: ElevatedButton(
-//                                 style: ElevatedButton.styleFrom(
-//                                   backgroundColor:
-//                                       const Color(0xFFE34234), // red
-//                                   padding: const EdgeInsets.symmetric(
-//                                       horizontal: 40, vertical: 18),
-//                                   shape: RoundedRectangleBorder(
-//                                     borderRadius: BorderRadius.circular(6),
+//                       // Right Form Box
+//                       Expanded(
+//                         flex: 2,
+//                         child: Container(
+//                           padding: const EdgeInsets.all(24),
+//                           decoration: BoxDecoration(
+//                             border: Border.all(color: Colors.grey.shade300),
+//                             borderRadius: BorderRadius.circular(8),
+//                           ),
+//                           child: Column(
+//                             crossAxisAlignment: CrossAxisAlignment.start,
+//                             children: [
+//                               // Top 3 input fields
+//                               Row(
+//                                 children: [
+//                                   Expanded(
+//                                       child: _textField(
+//                                           'Your Name *', nameController)),
+//                                   const SizedBox(width: 16),
+//                                   Expanded(
+//                                       child: _textField(
+//                                           'Your Email *', emailController)),
+//                                   const SizedBox(width: 16),
+//                                   Expanded(
+//                                       child: _textField(
+//                                           'Your Phone *', phoneController)),
+//                                 ],
+//                               ),
+//                               const SizedBox(height: 20),
+//                               _textField('Your Message', messageController,
+//                                   maxLines: 6),
+//                               const SizedBox(height: 24),
+//                               Align(
+//                                 alignment: Alignment.centerRight,
+//                                 child: ElevatedButton(
+//                                   style: ElevatedButton.styleFrom(
+//                                     backgroundColor:
+//                                         const Color(0xFFE34234), // red
+//                                     padding: const EdgeInsets.symmetric(
+//                                         horizontal: 40, vertical: 18),
+//                                     shape: RoundedRectangleBorder(
+//                                       borderRadius: BorderRadius.circular(6),
+//                                     ),
 //                                   ),
-//                                 ),
-//                                 onPressed: () {
-//                                   // TODO: send message logic
-//                                 },
-//                                 child: const Text(
-//                                   'Send Message',
-//                                   style: TextStyle(
-//                                     fontSize: 16,
-//                                     fontWeight: FontWeight.w500,
-//                                     color: Colors.white,
+//                                   onPressed: () {
+//                                     // TODO: send message logic
+//                                   },
+//                                   child: const Text(
+//                                     'Send Message',
+//                                     style: TextStyle(
+//                                       fontSize: 16,
+//                                       fontWeight: FontWeight.w500,
+//                                       color: Colors.white,
+//                                     ),
 //                                   ),
 //                                 ),
 //                               ),
-//                             ),
-//                           ],
+//                             ],
+//                           ),
 //                         ),
 //                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ],
+//                     ],
+//                   ),
+//                 ],
+//               ),
 //             ),
-//           ),
-//           const CustomFooter()
-//         ],
+
+//             // 🦶 Footer (no padding)
+//             const CustomFooter(),
+//           ],
+//         ),
 //       ),
 //     );
 //   }
@@ -136,11 +157,11 @@
 //       children: [
 //         Container(
 //           padding: const EdgeInsets.all(10),
-//           decoration: BoxDecoration(
-//             color: const Color(0xFFFFECEC),
+//           decoration: const BoxDecoration(
+//             color: Color(0xFFFFECEC),
 //             shape: BoxShape.circle,
 //           ),
-//           child: Icon(icon, color: const Color(0xFFE34234), size: 26),
+//           child: Icon(icon, color: Color(0xFFE34234), size: 26),
 //         ),
 //         const SizedBox(width: 16),
 //         Expanded(
@@ -162,8 +183,10 @@
 //   }
 
 //   // ✏️ Reusable TextField Widget
-//   Widget _textField(String hint, {int maxLines = 1}) {
+//   Widget _textField(String hint, TextEditingController controller,
+//       {int maxLines = 1}) {
 //     return TextField(
+//       controller: controller,
 //       maxLines: maxLines,
 //       decoration: InputDecoration(
 //         hintText: hint,
@@ -182,133 +205,192 @@
 //     );
 //   }
 // }
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/contact/contact_bloc.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/contact/contact_event.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/contact/contact_state.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/widgets/custom_appBar.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/widgets/custom_footer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ContactPage extends StatelessWidget {
+class ContactPage extends StatefulWidget {
   const ContactPage({super.key});
+
+  @override
+  State<ContactPage> createState() => _ContactPageState();
+}
+
+class _ContactPageState extends State<ContactPage> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController messageController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 40),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // 🧭 Breadcrumb
-                  const Text(
-                    'Home / Contact',
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
-                  ),
-                  const SizedBox(height: 40),
-
-                  // 🧱 Main Content Row
-                  Row(
+      body: BlocConsumer<ContactBloc, ContactState>(
+        listener: (context, state) {
+          if (state is ContactSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Message sent successfully!")));
+          }
+          if (state is ContactFailure) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text("Error: ${state.error}")));
+          }
+        },
+        builder: (context, state) {
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 80, vertical: 40),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Left Info Box
-                      Expanded(
-                        flex: 1,
-                        child: Container(
-                          padding: const EdgeInsets.all(24),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey.shade300),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _contactItem(
-                                icon: Icons.phone_in_talk_rounded,
-                                title: 'Call To Us',
-                                subtitle:
-                                    'We are available 24/7, 7 days a week.\nPhone: +8801611122222',
-                              ),
-                              Divider(color: Colors.grey.shade300, height: 40),
-                              _contactItem(
-                                icon: Icons.email_rounded,
-                                title: 'Write To Us',
-                                subtitle:
-                                    'Fill out our form and we will contact you within 24 hours.\n\nEmails:\ncustomer@exclusive.com\nsupport@exclusive.com',
-                              ),
-                            ],
-                          ),
-                        ),
+                      // 🧭 Breadcrumb
+                      const Text(
+                        'Home / Contact',
+                        style: TextStyle(fontSize: 16, color: Colors.grey),
                       ),
+                      const SizedBox(height: 40),
 
-                      const SizedBox(width: 40),
-
-                      // Right Form Box
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          padding: const EdgeInsets.all(24),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey.shade300),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Top 3 input fields
-                              Row(
+                      // 🧱 Main Content Row
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Left Info Box
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              padding: const EdgeInsets.all(24),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey.shade300),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Expanded(child: _textField('Your Name *')),
-                                  const SizedBox(width: 16),
-                                  Expanded(child: _textField('Your Email *')),
-                                  const SizedBox(width: 16),
-                                  Expanded(child: _textField('Your Phone *')),
+                                  _contactItem(
+                                    icon: Icons.phone_in_talk_rounded,
+                                    title: 'Call To Us',
+                                    subtitle:
+                                        'We are available 24/7, 7 days a week.\nPhone: +8801611122222',
+                                  ),
+                                  Divider(
+                                      color: Colors.grey.shade300, height: 40),
+                                  _contactItem(
+                                    icon: Icons.email_rounded,
+                                    title: 'Write To Us',
+                                    subtitle:
+                                        'Fill out our form and we will contact you within 24 hours.\n\nEmails:\ncustomer@exclusive.com\nsupport@exclusive.com',
+                                  ),
                                 ],
                               ),
-                              const SizedBox(height: 20),
-                              _textField('Your Message', maxLines: 6),
-                              const SizedBox(height: 24),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        const Color(0xFFE34234), // red
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 40, vertical: 18),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    // TODO: send message logic
-                                  },
-                                  child: const Text(
-                                    'Send Message',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
+
+                          const SizedBox(width: 40),
+
+                          // Right Form Box
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              padding: const EdgeInsets.all(24),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey.shade300),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Top 3 input fields
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                          child: _textField(
+                                              'Your Name *', nameController)),
+                                      const SizedBox(width: 16),
+                                      Expanded(
+                                          child: _textField(
+                                              'Your Email *', emailController)),
+                                      const SizedBox(width: 16),
+                                      Expanded(
+                                          child: _textField(
+                                              'Your Phone *', phoneController)),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 20),
+                                  _textField('Your Message', messageController,
+                                      maxLines: 6),
+                                  const SizedBox(height: 24),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            const Color(0xFFE34234), // red
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 40, vertical: 18),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(6),
+                                        ),
+                                      ),
+                                      onPressed: state is ContactLoading
+                                          ? null
+                                          : () {
+                                              context
+                                                  .read<ContactBloc>()
+                                                  .add(SendContactEvent(
+                                                    name: nameController.text,
+                                                    email: emailController.text,
+                                                    phone: phoneController.text,
+                                                    message:
+                                                        messageController.text,
+                                                  ));
+                                              Navigator.pushReplacementNamed(
+                                                  context, '/home');
+                                            },
+                                      child: state is ContactLoading
+                                          ? const SizedBox(
+                                              width: 20,
+                                              height: 20,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                                color: Colors.white,
+                                              ),
+                                            )
+                                          : const Text(
+                                              'Send Message',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
-            ),
+                ),
 
-            // 🦶 Footer (no padding)
-            const CustomFooter(),
-          ],
-        ),
+                // 🦶 Footer (no padding)
+                const CustomFooter(),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -350,8 +432,10 @@ class ContactPage extends StatelessWidget {
   }
 
   // ✏️ Reusable TextField Widget
-  Widget _textField(String hint, {int maxLines = 1}) {
+  Widget _textField(String hint, TextEditingController controller,
+      {int maxLines = 1}) {
     return TextField(
+      controller: controller,
       maxLines: maxLines,
       decoration: InputDecoration(
         hintText: hint,

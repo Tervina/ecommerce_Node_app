@@ -6,6 +6,8 @@ const userRoutes = require('./routes/userRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const orderRoutes = require("./routes/orderRoutes");
 const authRoutes = require('./routes/authRoutes');
+const contactRoute = require("./routes/contactRoute");
+
 
 
 require('dotenv').config(); //Initializes dotenv so it can load .env file contents into process.env.
@@ -38,6 +40,7 @@ app.use('/api/cart', cartRoutes);
 app.use("/api/orders", orderRoutes);
 
 app.use("/api/auth", authRoutes);
+app.use("/api/contact", contactRoute);
 
 
 

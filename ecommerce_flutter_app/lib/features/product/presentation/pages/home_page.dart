@@ -16,9 +16,9 @@ import 'package:ecommerce_flutter_app/features/product/presentation/widgets/vouc
 import 'package:ecommerce_flutter_app/features/product/presentation/widgets/custom_appBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/product_bloc.dart';
-import '../bloc/product_event.dart';
-import '../bloc/product_state.dart';
+import '../bloc/product/product_bloc.dart';
+import '../bloc/product/product_event.dart';
+import '../bloc/product/product_state.dart';
 import '../../domain/usecases/get_all_products.dart';
 import '../../data/repositories/product_repository_impl.dart';
 import '../../data/datasources/product_remote_data_source.dart';

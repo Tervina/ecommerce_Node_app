@@ -4,17 +4,19 @@ import 'package:ecommerce_flutter_app/features/product/data/datasources/order_re
 import 'package:ecommerce_flutter_app/features/product/data/repositories/category_repository_impl.dart';
 import 'package:ecommerce_flutter_app/features/product/data/repositories/order_repository_impl.dart';
 import 'package:ecommerce_flutter_app/features/product/data/services/api_service.dart';
+import 'package:ecommerce_flutter_app/features/product/data/services/contact_service.dart';
 import 'package:ecommerce_flutter_app/features/product/domain/repositories/order_repository.dart';
-import 'package:ecommerce_flutter_app/features/product/presentation/bloc/cart_bloc.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/cart/cart_bloc.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/bloc/category/category_bloc.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/contact/contact_bloc.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/bloc/order/order_bloc.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/pages/cart_page.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/pages/contact_page.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/pages/login_page.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/pages/reset_password_page.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/pages/signUp_page.dart';
-import 'package:ecommerce_flutter_app/presentation/pages/about_page.dart';
-import 'package:ecommerce_flutter_app/presentation/pages/checkout_page.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/pages/about_page.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/pages/checkout_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -57,6 +59,9 @@ Future<void> main() async {
             ),
           ),
         ),
+        BlocProvider(
+          create: (_) => ContactBloc(ContactService()),
+        ),
       ],
       child: const MyApp(), // <-- wrap MyApp here
     ),
@@ -91,79 +96,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-
-//   await Supabase.initialize(
-//     url: 'https://ufwatjrtbxpwawbonpjt.supabase.co',
-//     anonKey: 'YOUR_KEY',
-//   );
-
-//   // ✅ Create data source and repository
-//   final remoteDataSource = ProductRemoteDataSourceImpl(client: http.Client());
-//   final productRepository = ProductRepositoryImpl(remoteDataSource: remoteDataSource);
-
-//   // ✅ Usecases
-//   final getAllProducts = GetAllProducts(productRepository);
-//   final getProductById = GetProductById(productRepository);
-
-//   runApp(MultiRepositoryProvider(
-//     providers: [
-//       RepositoryProvider.value(value: productRepository),
-//       RepositoryProvider.value(value: getAllProducts),
-//       RepositoryProvider.value(value: getProductById),
-//     ],
-//     child: MyApp(),
-//   ));
-// }
-
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MultiBlocProvider(
-//       providers: [
-//         BlocProvider(
-//           create: (_) => ProductBloc(
-//             RepositoryProvider.of<GetAllProducts>(context),
-//             RepositoryProvider.of<GetProductById>(context),
-//           ),
-//         ),
-//       ],
-//       child: MaterialApp(
-//         navigatorKey: navigatorKey,
-//         title: 'E-commerce App',
-//         debugShowCheckedModeBanner: false,
-//         initialRoute: '/',
-//         routes: {
-//           '/': (context) => const HomePage(),
-//           '/contact': (context) => const ContactPage(),
-//           '/about': (context) => const AboutPage(),
-//           '/signUp': (context) => const SignUpPage(),
-//           '/login': (_) => const LoginPage(),
-//           '/forgetPass': (_) => const ForgotPasswordPage(),
-//           '/reset-password': (_) => ResetPasswordPage(),
-//           '/edit-profile': (_) => const EditProfilePage(),
-//           '/categoryItems': (context) {
-//             final args = ModalRoute.of(context)!.settings.arguments
-//                 as Map<String, dynamic>;
-//             return CategoryItemsPage(
-//               category: args['category'],
-//               products: args['products'],
-//             );
-//           },
-//         },
-//         onGenerateRoute: (settings) {
-//           if (settings.name == '/product-details') {
-//             final args = settings.arguments as Map<String, dynamic>;
-//             return MaterialPageRoute(
-//               builder: (context) => ProductDetailsPage(productId: args['productId']),
-//             );
-//           }
-//           return null;
-//         },
-//         theme: ThemeData(primarySwatch: Colors.blue),
-//       ),
-//     );
-//   }
-// }

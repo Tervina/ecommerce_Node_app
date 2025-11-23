@@ -4,8 +4,9 @@ import 'package:ecommerce_flutter_app/features/product/data/repositories/product
 import 'package:ecommerce_flutter_app/features/product/domain/entities/product_entity.dart';
 import 'package:ecommerce_flutter_app/features/product/domain/usecases/get_all_products.dart';
 import 'package:ecommerce_flutter_app/features/product/domain/usecases/get_product_by_id.dart';
-import 'package:ecommerce_flutter_app/features/product/presentation/bloc/product_details_bloc.dart';
-import 'package:ecommerce_flutter_app/features/product/presentation/bloc/product_details_event.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/productDetails/product_details_bloc.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/productDetails/product_details_event.dart';
+
 import 'package:ecommerce_flutter_app/features/product/presentation/pages/product_details_page.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/widgets/custom_appBar.dart';
 import 'package:flutter/material.dart';

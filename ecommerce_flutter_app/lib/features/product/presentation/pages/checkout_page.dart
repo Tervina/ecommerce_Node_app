@@ -1,8 +1,8 @@
 import 'package:ecommerce_flutter_app/core/network/user_storage.dart';
 import 'package:ecommerce_flutter_app/features/product/data/services/order_service.dart';
-import 'package:ecommerce_flutter_app/features/product/presentation/bloc/cart_bloc.dart';
-import 'package:ecommerce_flutter_app/features/product/presentation/bloc/cart_event.dart';
-import 'package:ecommerce_flutter_app/features/product/presentation/bloc/cart_state.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/cart/cart_bloc.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/cart/cart_event.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/cart/cart_state.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/bloc/order/order_bloc.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/bloc/order/order_event.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/bloc/order/order_state.dart';

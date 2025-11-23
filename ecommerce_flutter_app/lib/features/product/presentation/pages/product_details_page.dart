@@ -1,5 +1,5 @@
-import 'package:ecommerce_flutter_app/features/product/presentation/bloc/cart_bloc.dart';
-import 'package:ecommerce_flutter_app/features/product/presentation/bloc/cart_event.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/cart/cart_bloc.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/cart/cart_event.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/bloc/product_details_event.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/bloc/product_details_state.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/pages/cart_page.dart';
