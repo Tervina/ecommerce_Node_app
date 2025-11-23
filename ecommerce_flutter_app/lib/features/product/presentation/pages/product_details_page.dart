@@ -1,13 +1,13 @@
 import 'package:ecommerce_flutter_app/features/product/presentation/bloc/cart/cart_bloc.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/bloc/cart/cart_event.dart';
-import 'package:ecommerce_flutter_app/features/product/presentation/bloc/product_details_event.dart';
-import 'package:ecommerce_flutter_app/features/product/presentation/bloc/product_details_state.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/productDetails/product_details_event.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/productDetails/product_details_state.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/pages/cart_page.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/widgets/Product_card.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/widgets/custom_appBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ecommerce_flutter_app/features/product/presentation/bloc/product_details_bloc.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/productDetails/product_details_bloc.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/widgets/custom_footer.dart';
 
 class ProductDetails extends StatefulWidget {

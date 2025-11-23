@@ -1066,8 +1066,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // ✅ Import your services, repository, bloc, and api
 import 'package:ecommerce_flutter_app/features/product/data/services/api_service.dart';
 import 'package:ecommerce_flutter_app/features/product/data/repositories/product_repository_impl.dart';
-import 'package:ecommerce_flutter_app/features/product/presentation/bloc/product_details_bloc.dart';
-import 'package:ecommerce_flutter_app/features/product/presentation/bloc/product_details_event.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/productDetails/product_details_bloc.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/productDetails/product_details_event.dart';
 import 'package:http/http.dart' as http;
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
