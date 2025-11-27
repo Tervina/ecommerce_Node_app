@@ -1,11 +1,22 @@
+// const mongoose = require('mongoose');
+
+// const userSchema = new mongoose.Schema({
+// //   user_id: { type: String, unique: true }, // e.g., UUID or custom ID
+//   name: { type: String, required: true },
+//   email: { type: String, required: true, unique: true },
+//   password: { type: String, required: true }, // You should hash this!
+//   created_at: { type: Date, default: Date.now }
+// }, { collection: 'users' }); // 👈 sets MongoDB collection name to "users"
+
+// module.exports = mongoose.model('User', userSchema);
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-//   user_id: { type: String, unique: true }, // e.g., UUID or custom ID
+  supabase_id: { type: String, required: true, unique: true }, // ⚠️ Important!
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true }, // You should hash this!
+  password: { type: String }, // Can be null for OAuth users
   created_at: { type: Date, default: Date.now }
-}, { collection: 'users' }); // 👈 sets MongoDB collection name to "users"
+}, { collection: 'users' });
 
 module.exports = mongoose.model('User', userSchema);

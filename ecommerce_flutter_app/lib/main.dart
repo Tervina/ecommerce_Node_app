@@ -5,11 +5,14 @@ import 'package:ecommerce_flutter_app/features/product/data/repositories/categor
 import 'package:ecommerce_flutter_app/features/product/data/repositories/order_repository_impl.dart';
 import 'package:ecommerce_flutter_app/features/product/data/services/api_service.dart';
 import 'package:ecommerce_flutter_app/features/product/data/services/contact_service.dart';
+import 'package:ecommerce_flutter_app/features/product/data/services/wishlist_service.dart';
 import 'package:ecommerce_flutter_app/features/product/domain/repositories/order_repository.dart';
+import 'package:ecommerce_flutter_app/features/product/domain/repositories/wishlist_repository.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/bloc/cart/cart_bloc.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/bloc/category/category_bloc.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/bloc/contact/contact_bloc.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/bloc/order/order_bloc.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/wishlist/wishlist_bloc.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/pages/cart_page.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/pages/contact_page.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/pages/login_page.dart';
@@ -17,6 +20,7 @@ import 'package:ecommerce_flutter_app/features/product/presentation/pages/reset_
 import 'package:ecommerce_flutter_app/features/product/presentation/pages/signUp_page.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/pages/about_page.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/pages/checkout_page.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/pages/wishlist_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -62,6 +66,14 @@ Future<void> main() async {
         BlocProvider(
           create: (_) => ContactBloc(ContactService()),
         ),
+
+        BlocProvider(
+          create: (_) => WishlistBloc(
+            WishlistRepository(
+              WishlistService(),
+            ),
+          ),
+        ),
       ],
       child: const MyApp(), // <-- wrap MyApp here
     ),
@@ -88,6 +100,21 @@ class MyApp extends StatelessWidget {
         '/contact': (context) => const ContactPage(),
         '/signUp': (context) => const SignUpPage(),
         '/login': (context) => const LoginPage(),
+        // '/wishlist': (context) => WishlistPage(
+        //     userId: Supabase.instance.client.auth.currentUser?.id ?? ''),
+        '/wishlist': (context) {
+          // Get userId when route is actually navigated to
+          final userId = Supabase.instance.client.auth.currentUser?.id ?? '';
+
+          print('🔍 Navigating to wishlist with userId: $userId');
+
+          if (userId.isEmpty) {
+            // If no user, redirect to login
+            return const LoginPage();
+          }
+
+          return WishlistPage();
+        },
         '/reset-password': (context) {
           final email = ModalRoute.of(context)!.settings.arguments as String?;
           return ResetPasswordPage(email: email);

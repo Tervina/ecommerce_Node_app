@@ -235,15 +235,14 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   void initState() {
     super.initState();
-    // Listen for OAuth callback
     _setupAuthListener();
   }
 
   void _setupAuthListener() {
-    Supabase.instance.client.auth.onAuthStateChange.listen((data) {
-      final session = data.session;
+    Supabase.instance.client.auth.onAuthStateChange.listen((event) {
+      final session = event.session;
+
       if (session != null && mounted) {
-        // User successfully authenticated with Google
         _handleGoogleSignInSuccess(session);
       }
     });
@@ -253,56 +252,53 @@ class _SignUpPageState extends State<SignUpPage> {
     try {
       final user = session.user;
 
-      // Extract user information
       final name = user.userMetadata?['full_name'] ??
           user.userMetadata?['name'] ??
           user.email?.split('@')[0] ??
-          'User';
+          "User";
 
-      // Send to backend
+      final supabaseId = user.id;
+      final email = user.email ?? "";
+
       final response = await _authService.googleLogin(
-        user.id,
-        user.email ?? '',
+        supabaseId,
+        email,
         name,
       );
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(response ?? "Google sign-in successful!")),
-        );
+            SnackBar(content: Text(response ?? "Google login success")));
 
-        // Navigate to home page
         Navigator.pushReplacementNamed(context, '/home');
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error syncing with backend: $e')),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Error: $e")));
       }
     } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
   Future<void> _handleSignUp() async {
     setState(() => _isLoading = true);
 
-    String name = _nameController.text.trim();
-    String email = _emailController.text.trim();
-    String password = _passwordController.text.trim();
+    final name = _nameController.text.trim();
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
 
     if (name.isEmpty || email.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Please fill all fields")),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Please fill all fields")));
+      }
       setState(() => _isLoading = false);
       return;
     }
 
-    String? message = await _authService.signUp(name, email, password);
+    final message = await _authService.signUp(name, email, password);
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -317,22 +313,16 @@ class _SignUpPageState extends State<SignUpPage> {
     setState(() => _isLoading = true);
 
     try {
-      final supabase = Supabase.instance.client;
-
-      // Use the correct Supabase callback URL
-      await supabase.auth.signInWithOAuth(
+      await Supabase.instance.client.auth.signInWithOAuth(
         OAuthProvider.google,
         redirectTo: 'https://ufwatjrtbxpwawbonpjt.supabase.co/auth/v1/callback',
       );
-
-      // The auth listener will handle the rest after user returns
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
-        );
-        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Error: $e")));
       }
+      setState(() => _isLoading = false);
     }
   }
 
@@ -358,24 +348,20 @@ class _SignUpPageState extends State<SignUpPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    flex: 1,
                     child: Image.asset(
-                      'assets/images/signup_image.png',
+                      "assets/images/signup_image.png",
                       fit: BoxFit.contain,
                     ),
                   ),
                   const SizedBox(width: 60),
                   Expanded(
-                    flex: 1,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
                           "Create an account",
                           style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                          ),
+                              fontSize: 32, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 10),
                         const Text(
@@ -397,9 +383,6 @@ class _SignUpPageState extends State<SignUpPage> {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.redAccent,
                               padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5),
-                              ),
                             ),
                             child: _isLoading
                                 ? const CircularProgressIndicator(
@@ -407,10 +390,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 : const Text(
                                     "Create Account",
                                     style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500,
-                                    ),
+                                        fontSize: 18, color: Colors.white),
                                   ),
                           ),
                         ),
@@ -419,37 +399,18 @@ class _SignUpPageState extends State<SignUpPage> {
                           width: double.infinity,
                           child: OutlinedButton.icon(
                             onPressed: _isLoading ? null : _signInWithGoogle,
-                            icon: _isLoading
-                                ? const SizedBox(
-                                    width: 24,
-                                    height: 24,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                    ),
-                                  )
-                                : Image.asset(
-                                    'assets/images/google.png',
-                                    height: 24,
-                                  ),
-                            label: const Text(
-                              "Sign up with Google",
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.black),
-                            ),
-                            style: OutlinedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              side: const BorderSide(color: Colors.grey),
-                            ),
+                            icon: Image.asset("assets/images/google.png",
+                                height: 24),
+                            label: const Text("Sign up with Google"),
                           ),
                         ),
                         const SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text(
-                              "Already have an account? ",
-                              style: TextStyle(color: Colors.grey),
-                            ),
+                            const Text("Already have an account?",
+                                style: TextStyle(color: Colors.grey)),
+                            const SizedBox(width: 5),
                             InkWell(
                               onTap: () {
                                 Navigator.pushNamed(context, '/login');
@@ -457,16 +418,15 @@ class _SignUpPageState extends State<SignUpPage> {
                               child: const Text(
                                 "Log in",
                                 style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
                               ),
-                            ),
+                            )
                           ],
-                        ),
+                        )
                       ],
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
@@ -477,17 +437,14 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Widget _buildTextField(String hintText, TextEditingController controller,
+  Widget _buildTextField(String hint, TextEditingController controller,
       {bool isPassword = false}) {
     return TextField(
       controller: controller,
       obscureText: isPassword,
       decoration: InputDecoration(
-        hintText: hintText,
+        hintText: hint,
         border: const UnderlineInputBorder(),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.black),
-        ),
       ),
     );
   }
