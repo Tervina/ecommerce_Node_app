@@ -47,21 +47,6 @@ class _HomePageState extends State<HomePage> {
     ];
     //BlocProvider makes the BLoC available to all child widgets below it.
     return BlocProvider(
-      //This is the function that tells BlocProvider how to create the BLoC instance.
-      // create: (_) {
-      //   final repository = ProductRepositoryImpl(
-      //     remoteDataSource: ProductRemoteDataSourceImpl(client: http.Client()),
-      //   );
-
-      //   final bloc = ProductBloc(
-      //     GetAllProducts(repository),
-      //     GetProductById(repository),
-      //     getAllProducts: null,
-      //   );
-
-      //   bloc.add(LoadProducts()); // Load products when page opens
-      //   return bloc;
-      // },
       create: (_) {
         final repository = ProductRepositoryImpl(
           remoteDataSource: ProductRemoteDataSourceImpl(client: http.Client()),
@@ -100,42 +85,6 @@ class _HomePageState extends State<HomePage> {
                             SizedBox(
                               child: Column(children: [
                                 Column(children: [
-                                  // HoverMenu(
-                                  //   menuItems: const [
-                                  //     'Computers',
-                                  //     'Televisions',
-                                  //     'Cables&Accessories',
-                                  //     'Smart watch',
-                                  //     'Home Supplies'
-                                  //   ],
-                                  //   onTap: () {
-                                  //     Navigator.push(
-                                  //       context,
-                                  //       MaterialPageRoute(
-                                  //         builder: (context) => BlocProvider(
-                                  //           create: (context) => CategoryBloc(
-                                  //             CategoryRepositoryImpl(
-                                  //               remoteDataSource:
-                                  //                   CategoryRemoteDataSource(
-                                  //                 Dio(),
-                                  //                 apiService: ApiService(),
-                                  //               ),
-                                  //             ),
-                                  //           )..add(LoadCategoryProducts(
-                                  //               categoryName)),
-                                  //           child: CategoryPage(
-                                  //               categoryName: categoryName),
-                                  //         ),
-                                  //       ),
-                                  //     );
-                                  //   },
-                                  //   width: 300,
-                                  //   backgroundColor: const Color.fromARGB(
-                                  //       255, 193, 193, 193),
-                                  //   hoverColor: Colors.green.withOpacity(0.2),
-                                  //   hoverTextColor: Colors.green,
-                                  //   fontSize: 16,
-                                  // )
                                   HoverMenu(
                                     menuItems: const [
                                       'laptop',

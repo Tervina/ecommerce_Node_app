@@ -1,10 +1,17 @@
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/product/product_bloc.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/product/product_state.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/pages/product_details_page.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/widgets/Product_card.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/widgets/custom_appBar.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/widgets/custom_footer.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/widgets/wishlist_product_card.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/wishlist/wishlist_bloc.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/wishlist/wishlist_event.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/wishlist/wishlist_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:ecommerce_flutter_app/features/product/presentation/bloc/wishlist/wishlist_bloc.dart';
-import 'package:ecommerce_flutter_app/features/product/presentation/bloc/wishlist/wishlist_event.dart';
-import 'package:ecommerce_flutter_app/features/product/presentation/bloc/wishlist/wishlist_state.dart';
 
 class WishlistPage extends StatefulWidget {
   const WishlistPage({Key? key}) : super(key: key);
@@ -20,115 +27,178 @@ class _WishlistPageState extends State<WishlistPage> {
   @override
   void initState() {
     super.initState();
-    _checkUserAndLoadWishlist();
+    _loadUserAndWishlist();
   }
 
-  Future<void> _checkUserAndLoadWishlist() async {
-    final user = Supabase.instance.client.auth.currentUser;
+  Future<void> _loadUserAndWishlist() async {
+    final supabaseUser = Supabase.instance.client.auth.currentUser;
 
-    if (user != null) {
-      setState(() {
-        userId = user.id;
-        isLoading = false;
-      });
-      context.read<WishlistBloc>().add(LoadWishlist(user.id));
-      return;
+    if (supabaseUser != null) {
+      userId = supabaseUser.id;
+    } else {
+      final prefs = await SharedPreferences.getInstance();
+      userId = prefs.getString('user_id');
     }
 
-    final prefs = await SharedPreferences.getInstance();
-    final savedUserId = prefs.getString('user_id');
+    setState(() => isLoading = false);
 
-    if (savedUserId == null || savedUserId.isEmpty) {
-      setState(() {
-        userId = null;
-        isLoading = false;
-      });
-      return;
+    if (userId != null && userId!.isNotEmpty) {
+      context.read<WishlistBloc>().add(LoadWishlist(userId!));
     }
-
-    setState(() {
-      userId = savedUserId;
-      isLoading = false;
-    });
-
-    context.read<WishlistBloc>().add(LoadWishlist(savedUserId));
   }
 
   @override
   Widget build(BuildContext context) {
-    /// 1️⃣ Still loading? show progress
-    if (isLoading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    /// 2️⃣ Not logged in? Show login message
-    if (userId == null) {
-      return Scaffold(
-        appBar: AppBar(title: const Text('My Wishlist')),
-        body: const Center(
-          child: Text(
-            'Please log in first to see your wishlist',
-            style: TextStyle(fontSize: 16),
-          ),
-        ),
-      );
-    }
-
-    /// 3️⃣ Logged in → Show Wishlist
     return Scaffold(
-      appBar: AppBar(title: const Text("My Wishlist")),
-      body: BlocBuilder<WishlistBloc, WishlistState>(
-        builder: (context, state) {
-          if (state is WishlistLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (state is WishlistError) {
-            return Center(child: Text("Error: ${state.message}"));
-          }
-
-          if (state is WishlistLoaded) {
-            if (state.items.isEmpty) {
-              return const Center(
-                child: Text(
-                  "Your wishlist is empty",
-                  style: TextStyle(fontSize: 16),
-                ),
-              );
-            }
-
-            return ListView.builder(
-              itemCount: state.items.length,
-              itemBuilder: (context, index) {
-                final product = state.items[index].product;
-
-                return Card(
-                  margin: const EdgeInsets.all(10),
-                  child: ListTile(
-                    leading: Image.network(product.imageUrl, width: 50),
-                    title: Text(product.name),
-                    subtitle: Text(
-                      "Price: ${product.discountedPrice ?? product.price}",
-                    ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.red),
-                      onPressed: () {
-                        context.read<WishlistBloc>().add(
-                              RemoveFromWishlist(userId!, product.id),
-                            );
-                      },
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(150),
+        child: CustomAppBar(),
+      ),
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : userId == null || userId!.isEmpty
+              ? const Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 120),
+                    child: Text(
+                      "Please log in to view your wishlist ❤️",
+                      style: TextStyle(fontSize: 18),
                     ),
                   ),
-                );
-              },
-            );
-          }
+                )
+              : SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 20),
 
-          return const SizedBox.shrink();
-        },
-      ),
+                            // Wishlist Horizontal Scroll
+                            BlocBuilder<WishlistBloc, WishlistState>(
+                              builder: (context, state) {
+                                if (state is WishlistLoading) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                }
+
+                                if (state is WishlistError) {
+                                  return Center(
+                                      child: Text("Error: ${state.message}"));
+                                }
+
+                                if (state is WishlistLoaded) {
+                                  if (state.items.isEmpty) {
+                                    return const Center(
+                                        child: Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 80),
+                                      child: Text(
+                                        "Your wishlist is empty 🛒",
+                                        style: TextStyle(fontSize: 18),
+                                      ),
+                                    ));
+                                  }
+
+                                  return SizedBox(
+                                    height: 250,
+                                    child: ListView.separated(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: state.items.length,
+                                      separatorBuilder: (_, __) =>
+                                          const SizedBox(width: 16),
+                                      itemBuilder: (context, index) {
+                                        final product =
+                                            state.items[index].product;
+                                        return WishlistProductCard(
+                                          product: product,
+                                          onAddToCart: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (_) => ProductDetails(
+                                                    productId: product.id),
+                                              ),
+                                            );
+                                          },
+                                          onRemove: () {
+                                            context.read<WishlistBloc>().add(
+                                                RemoveFromWishlist(
+                                                    userId!, product.id));
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  );
+                                }
+
+                                return const SizedBox.shrink();
+                              },
+                            ),
+
+                            const SizedBox(height: 30),
+
+                            const Text(
+                              'Just For You 🤞',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            // Suggested / Random Products List
+                            BlocBuilder<ProductBloc, ProductState>(
+                              builder: (context, state) {
+                                if (state is ProductLoading) {
+                                  return const Center(
+                                      child: Padding(
+                                    padding: EdgeInsets.all(40),
+                                    child: CircularProgressIndicator(),
+                                  ));
+                                }
+
+                                if (state is ProductLoaded) {
+                                  // Shuffle product list
+                                  final shuffled = [...state.products]
+                                    ..shuffle();
+                                  final random15 = shuffled.take(15).toList();
+
+                                  return SizedBox(
+                                    height: 350,
+                                    child: ListView.separated(
+                                      scrollDirection: Axis.horizontal,
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount: random15.length,
+                                      separatorBuilder: (_, __) =>
+                                          const SizedBox(width: 12),
+                                      itemBuilder: (context, index) {
+                                        final product = random15[index];
+
+                                        return ProductCard(
+                                          product: product,
+                                        );
+                                      },
+                                    ),
+                                  );
+                                }
+
+                                return const SizedBox.shrink();
+                              },
+                            ),
+
+                            const SizedBox(height: 20),
+                          ],
+                        ),
+                      ),
+                      const CustomFooter(),
+                    ],
+                  ),
+                ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:ecommerce_flutter_app/features/product/data/models/product_model.dart';
+import 'package:ecommerce_flutter_app/features/product/domain/entities/product_entity.dart';
 
 class WishlistItem {
   final String productId;

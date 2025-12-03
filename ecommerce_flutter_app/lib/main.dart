@@ -1,17 +1,24 @@
 import 'package:dio/dio.dart';
 import 'package:ecommerce_flutter_app/features/product/data/datasources/category_remote_data_source.dart';
 import 'package:ecommerce_flutter_app/features/product/data/datasources/order_remote_data_source.dart';
+import 'package:ecommerce_flutter_app/features/product/data/datasources/product_remote_data_source.dart';
 import 'package:ecommerce_flutter_app/features/product/data/repositories/category_repository_impl.dart';
 import 'package:ecommerce_flutter_app/features/product/data/repositories/order_repository_impl.dart';
+import 'package:ecommerce_flutter_app/features/product/data/repositories/product_repository_impl.dart';
 import 'package:ecommerce_flutter_app/features/product/data/services/api_service.dart';
 import 'package:ecommerce_flutter_app/features/product/data/services/contact_service.dart';
 import 'package:ecommerce_flutter_app/features/product/data/services/wishlist_service.dart';
 import 'package:ecommerce_flutter_app/features/product/domain/repositories/order_repository.dart';
 import 'package:ecommerce_flutter_app/features/product/domain/repositories/wishlist_repository.dart';
+import 'package:ecommerce_flutter_app/features/product/domain/usecases/get_all_products.dart';
+import 'package:ecommerce_flutter_app/features/product/domain/usecases/get_product_by_id.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/bloc/cart/cart_bloc.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/bloc/category/category_bloc.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/bloc/contact/contact_bloc.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/bloc/order/order_bloc.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/product/product_bloc.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/product/product_event.dart';
+import 'package:ecommerce_flutter_app/features/product/presentation/bloc/productDetails/product_details_bloc.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/bloc/wishlist/wishlist_bloc.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/pages/cart_page.dart';
 import 'package:ecommerce_flutter_app/features/product/presentation/pages/contact_page.dart';
@@ -23,6 +30,7 @@ import 'package:ecommerce_flutter_app/features/product/presentation/pages/checko
 import 'package:ecommerce_flutter_app/features/product/presentation/pages/wishlist_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'features/product/presentation/pages/home_page.dart';
 
@@ -36,6 +44,16 @@ Future<void> main() async {
       authFlowType: AuthFlowType.pkce, // This is important!
     ),
   );
+  final productRemoteDataSource = ProductRemoteDataSourceImpl(
+    client: http.Client(),
+  );
+
+  final repository =
+      ProductRepositoryImpl(remoteDataSource: productRemoteDataSource);
+
+// Create use case instances
+  final getProductById = GetProductById(repository);
+  final getAllProducts = GetAllProducts(repository);
 
   runApp(
     MultiBlocProvider(
@@ -73,6 +91,16 @@ Future<void> main() async {
               WishlistService(),
             ),
           ),
+        ),
+        BlocProvider(
+          create: (_) => ProductDetailsBloc(
+            getProductById: getProductById,
+            getAllProducts: getAllProducts,
+          ),
+        ),
+        BlocProvider(
+          create: (_) =>
+              ProductBloc(getAllProducts: getAllProducts)..add(LoadProducts()),
         ),
       ],
       child: const MyApp(), // <-- wrap MyApp here

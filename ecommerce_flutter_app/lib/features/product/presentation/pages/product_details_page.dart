@@ -172,7 +172,51 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                   item.productId == product.id);
                                             }
 
-                                            return IconButton(
+                                            return
+                                                //  IconButton(
+                                                //   icon: Icon(
+                                                //     isFavorite
+                                                //         ? Icons.favorite
+                                                //         : Icons.favorite_border,
+                                                //     color: isFavorite
+                                                //         ? Colors.red
+                                                //         : Colors.grey,
+                                                //     size: 30,
+                                                //   ),
+                                                //   onPressed: () {
+                                                //     final bloc = context
+                                                //         .read<WishlistBloc>();
+
+                                                //     // Optimistic update
+                                                //     if (isFavorite) {
+                                                //       items.removeWhere((item) =>
+                                                //           item.productId ==
+                                                //           product.id);
+                                                //       bloc.emit(WishlistLoaded(
+                                                //           [...items]));
+                                                //       bloc.add(RemoveFromWishlist(
+                                                //           userId!, product.id));
+                                                //     } else {
+                                                //       items.add(WishlistItem(
+                                                //           productId: product.id,
+                                                //           addedAt: DateTime.now(),
+                                                //           product: ProductModel(
+                                                //               id: product.id,
+                                                //               name: product.name,
+                                                //               actual_price:
+                                                //                   product.price,
+                                                //               description: product
+                                                //                   .description,
+                                                //               imageUrl: product
+                                                //                   .imageUrl)));
+                                                //       bloc.emit(WishlistLoaded(
+                                                //           [...items]));
+                                                //       bloc.add(AddToWishlist(
+                                                //           userId!, product.id));
+                                                //     }
+                                                //   },
+                                                // );
+                                                IconButton(
                                               icon: Icon(
                                                 isFavorite
                                                     ? Icons.favorite
@@ -186,30 +230,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                 final bloc = context
                                                     .read<WishlistBloc>();
 
-                                                // Optimistic update
                                                 if (isFavorite) {
-                                                  items.removeWhere((item) =>
-                                                      item.productId ==
-                                                      product.id);
-                                                  bloc.emit(WishlistLoaded(
-                                                      [...items]));
                                                   bloc.add(RemoveFromWishlist(
                                                       userId!, product.id));
                                                 } else {
-                                                  items.add(WishlistItem(
-                                                      productId: product.id,
-                                                      addedAt: DateTime.now(),
-                                                      product: ProductModel(
-                                                          id: product.id,
-                                                          name: product.name,
-                                                          actual_price:
-                                                              product.price,
-                                                          description: product
-                                                              .description,
-                                                          imageUrl: product
-                                                              .imageUrl)));
-                                                  bloc.emit(WishlistLoaded(
-                                                      [...items]));
                                                   bloc.add(AddToWishlist(
                                                       userId!, product.id));
                                                 }
